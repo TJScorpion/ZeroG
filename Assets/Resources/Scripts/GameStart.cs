@@ -317,6 +317,9 @@ public class GameStart : MonoBehaviour {
 
     void startGame()
     {
+		if (ScoreSystem == null) {
+			ScoreSystem = GameObject.Find ("ScoreSystem");
+		}
         //Store varibles in a permanent structure and then load a random level.
         ScoreSystem.GetComponent<GameOptions>().LoadOptions(isPlayer1Ready, isPlayer2Ready, 
             isPlayer3Ready, isPlayer4Ready, numOfRounds, maxNumberOfLevels);

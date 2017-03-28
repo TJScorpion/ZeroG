@@ -84,14 +84,19 @@ public class GridMap : MonoBehaviour {
 	private GameObject player;
 	private bool findingPlayers;
 	private int playerNum;
-	//private GameObject level;
+	private GameObject options;
 	private bool gameStart;
 	[HideInInspector] public bool playing = false;
 	//private bool playMusic;
-
+	public Object[] levels;
+	private int levelNum;
 
 
 	void Awake(){
+		levelNum = GameOptions.randomNumber;
+		//StartCoroutine ("Levels");
+		//levels = new Texture2D[GameOptions.maxLevels];
+		levels = Resources.LoadAll ("Art/2D/Level Layouts/Spring 2017/Becker");
 		//public GameObject bouncePad;
 		xSpawn = Resources.Load("Prefabs/Spawn_X") as GameObject;
 		bSpawn = Resources.Load("Prefabs/Spawn_B") as GameObject;
@@ -104,10 +109,19 @@ public class GridMap : MonoBehaviour {
 
 	}
 
+	IEnumerator Levels(){
+		Debug.Log ("levels");
+		//levels = new Texture2D[GameOptions.maxLevels];
+		Debug.Log ("build array");
+		yield return new WaitForSeconds(3);
+		levels = Resources.LoadAll ("Art/2D/Level Layouts/Spring 2017/Becker");
+		Debug.Log ("load levels");
+	}
     // Use this for initialization
     void Start () {
 		//FMOD
 		//Start of level ambiance
+		map = (Texture2D) levels[levelNum];
 		p2 = GameObject.Find("Player2");
 		p3 = GameObject.Find ("Player3");
 		p4 = GameObject.Find ("Player4");
@@ -121,7 +135,6 @@ public class GridMap : MonoBehaviour {
 		myOrange = orange.GetComponent<SpriteRenderer>();
 		myYellow = yellow.GetComponent<SpriteRenderer>();
 		myGreen = green.GetComponent<SpriteRenderer>();
-		generateArray = true;
 		if (!GameOptions.player2) {
 			p2.SetActive (false);
 		}
@@ -131,7 +144,7 @@ public class GridMap : MonoBehaviour {
 		if (!GameOptions.player4) {
 			p4.SetActive (false);
 		}
-			
+		generateArray = true;
     }
 
 
