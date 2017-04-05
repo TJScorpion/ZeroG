@@ -9,7 +9,7 @@ public class BouncePad : MonoBehaviour {
 	public int lastDir = 3;
 	public float timer = 10;
 	public float reset = 5;
-
+	public GameObject lightning;
 	int num;
 	int posX;
 	int posY;
@@ -39,6 +39,7 @@ public class BouncePad : MonoBehaviour {
 			transform.rotation = Quaternion.Euler(0,90,0);
 			timer = reset;
 			lastDir = 1;
+			lightning.GetComponent<ParticleSystem>().startRotation = 90;
 		}
 		//face left
 		if(direction == 4){
@@ -46,18 +47,21 @@ public class BouncePad : MonoBehaviour {
 			timer = reset;
 			lastDir = 2;
 			direction = 0;
+			lightning.GetComponent<ParticleSystem>().startRotation = 90;
 		}
 		//face up
 		if(direction == 1){
 			transform.rotation = Quaternion.Euler(0,0,0);
 			timer = reset;
 			lastDir = 3;
+			lightning.GetComponent<ParticleSystem>().startRotation = 0;
 		}
 		//face down
 		if(direction == 3){
 			transform.rotation = Quaternion.Euler(0,180,0);
 			timer = reset;
 			lastDir = 4;
+			lightning.GetComponent<ParticleSystem>().startRotation = 0;
 		}
 	}
 

@@ -3,22 +3,13 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class PlayerController : MonoBehaviour {
+public class PlayerController_old : MonoBehaviour {
 
-	//public static PlayerController_New S;
+	/*public static PlayerController S;
 	[Tooltip("Sprite Renderer from child")]
 	public SpriteRenderer sr;
 	[Tooltip("its own meshrenderer")]
 	public MeshRenderer mr;
-
-	public int player_number;
-	public string A_BUTTON = "A_P1";
-	public string B_BUTTON = "B_P1";
-	public string Y_BUTTON = "Y_P1";
-	public string X_BUTTON = "X_P1";
-	public string HORIZONTAL = "Horizontal";
-	public string VERTICAL = "Vertical";
-	public string SCORE_IMAGE = "exploreScore";
 
 	Image scoreIcon;
 
@@ -30,7 +21,7 @@ public class PlayerController : MonoBehaviour {
 	private float speedUp;
 	public float speedMult = 5.8f;
 	public float maxSpeed = 18.3f;
-	private float lastDirection;
+	public float lastDirection;
 	private float inputDirection;
 
 	public bool inMenu;
@@ -48,20 +39,20 @@ public class PlayerController : MonoBehaviour {
 	private Vector3 forward;
 	private float rotateSpeed = 130f;
 
-	private int[] playerPos;
+	public int[] playerPos;//private
 	GridMap map;
 	int respawn = 0;
 	public int[] respawnPos;
 	int x = 0;
-	int y = 1;
+	int y = 0;
 	bool finished = false;
-    bool paused = false;
-    private GameObject pauseTmp;
+	bool paused = false;
+	private GameObject pauseTmp;
 
-    // Use this for initialization
-    void Awake () {
+        // Use this for initialization
+	void Awake () {
 		up = new Vector3(0,yUp,0);
-		//S = this;
+//		S = this;
 		inMenu = true;
 		playerReady = true;
 		charCont = GetComponent<CharacterController> ();
@@ -69,30 +60,25 @@ public class PlayerController : MonoBehaviour {
         myCollider = GetComponent<BoxCollider>();
 		playerPos = new int[2];
 		respawnPos = new int[2];
-        GameObject tmp = GameObject.FindGameObjectWithTag(SCORE_IMAGE);
-        pauseTmp = GameObject.Find("Main Camera");
-        scoreIcon = tmp.GetComponent<Image> ();
+		GameObject tmp = GameObject.FindGameObjectWithTag ("exploreScore");
+		pauseTmp = GameObject.Find ("Main Camera");
+		scoreIcon = tmp.GetComponent<Image> ();
 		scoreIcon.enabled = false;
-		//Debug.Log ("p1");
 	}
 
-    void Update()
-    {
-        paused = pauseTmp.GetComponent<PauseGame>().paused;
-    }
+	void Update(){
+		paused = pauseTmp.GetComponent<PauseGame> ().paused;
+	}
     // Update is called once per frame
     void FixedUpdate()
     {
 		if (!finished) {
-			if ((charCont.collisionFlags & CollisionFlags.Sides) != 0) {
-				Debug.Log ("front bash");
-				//stopped = true;
-			}
 			forward = this.transform.TransformDirection (Vector3.forward);
 			/*Vector3 up = new Vector3 (0, yUp, 0);
 		Vector3 forward = transform.TransformDirection (Vector3.forward) * length;
-		Debug.DrawRay (transform.position + up, forward, Color.green, 100);*/
+		Debug.DrawRay (transform.position + up, forward, Color.green, 100);
 			GetInput ();
+			//CheckDirection ();
 			if (speedTimer > 0) {
 				speedTimer -= Time.deltaTime;
 			}
@@ -103,8 +89,10 @@ public class PlayerController : MonoBehaviour {
 			//Use  Spawn_XYAB(Clone) becuase that is how Unity decides to name them when instantiating
 			if (inMenu && playerReady == false && paused == false) {
 				int[] tmp = new int[2];
-				if (Input.GetButtonDown (A_BUTTON) && SpawnControl.S.spawnA == false) {
+				if (Input.GetButtonDown ("A_P1") && SpawnControl.S.spawnA == false) {
 					//Debug.Log("poo");
+					//FMOD
+					//Sound for spawn select
 					spawnPoint = GameObject.Find ("Spawn_A(Clone)");
 					SpawnControl.S.spawnA = true;
 					tmp = SpawnControl.S.giveA ();
@@ -120,7 +108,9 @@ public class PlayerController : MonoBehaviour {
 					GameObject gm = GameObject.FindGameObjectWithTag ("Map");
 					map = gm.GetComponent<GridMap> ();
 				}
-				if (Input.GetButtonDown (B_BUTTON) && SpawnControl.S.spawnB == false) {
+				if (Input.GetButtonDown ("B_P1") && SpawnControl.S.spawnB == false) {
+					//FMOD
+					//Sound for spawn select
 					spawnPoint = GameObject.Find ("Spawn_B(Clone)");
 					SpawnControl.S.spawnB = true;
 					tmp = SpawnControl.S.giveB ();
@@ -137,7 +127,9 @@ public class PlayerController : MonoBehaviour {
 					GameObject gm = GameObject.FindGameObjectWithTag ("Map");
 					map = gm.GetComponent<GridMap> ();
 				}
-				if (Input.GetButtonDown (X_BUTTON) && SpawnControl.S.spawnX == false) {
+				if (Input.GetButtonDown ("X_P1") && SpawnControl.S.spawnX == false) {
+					//FMOD
+					//Sound for spawn select
 					spawnPoint = GameObject.Find ("Spawn_X(Clone)");
 					SpawnControl.S.spawnX = true;
 					tmp = SpawnControl.S.giveX ();
@@ -153,7 +145,9 @@ public class PlayerController : MonoBehaviour {
 					GameObject gm = GameObject.FindGameObjectWithTag ("Map");
 					map = gm.GetComponent<GridMap> ();
 				}
-				if (Input.GetButtonDown (Y_BUTTON) && SpawnControl.S.spawnY == false) {
+				if (Input.GetButtonDown ("Y_P1") && SpawnControl.S.spawnY == false) {
+					//FMOD
+					//Sound for spawn select
 					spawnPoint = GameObject.Find ("Spawn_Y(Clone)");
 					SpawnControl.S.spawnY = true;
 					tmp = SpawnControl.S.giveY ();
@@ -214,81 +208,34 @@ public class PlayerController : MonoBehaviour {
 				}
 
 				//If not facing asteroid player starts moving
-				if (Input.GetButton (A_BUTTON)/* && hitAsteroid == false*/) {
+				if (Input.GetButton ("A_P1")/* && hitAsteroid == false) {
 					stopped = false;
 				}
 
 			}
-			arrayCollision (x, y);
+			arrayCollision ();
 
 			//Manual respawn
 			if (playerReady) {
-				if (Input.GetButtonDown (X_BUTTON)) {
+				if (Input.GetButtonDown ("X_P1")) {
 					myParticle.Play ();
 					Die ();
 					/*this.transform.position = spawnPoint.transform.position;
-					stopped = true;*/
+					stopped = true;
 				}
 			}
 
 		}
-    }
+}
 
-    void CheckDirection()
-    {
-        //Check if game has started and if player is stopped
-        if (stopped == true && inMenu == false)
-        {
-            speedUp = 0;
 
-            //up
-            if (lastDirection == 3)
-            {
-                y = 1;
-                x = 0;
-                transform.rotation = Quaternion.Euler(0, 0, 0);
 
-            }
-            //right
-            if (lastDirection == 1)
-            {
-                y = 0;
-                x = 1;
-                transform.rotation = Quaternion.Euler(0, 90, 0);
-
-            }
-            //down
-            if (lastDirection == 4)
-            {
-                y = -1;
-                x = 0;
-                transform.rotation = Quaternion.Euler(0, 180, 0);
-
-            }
-            //left
-            if (lastDirection == 2)
-            {
-                y = 0;
-                x = -1;
-                transform.rotation = Quaternion.Euler(0, -90, 0);
-
-            }
-
-            //If not facing asteroid player starts moving
-            //if (Input.GetButton (A_BUTTON)/* && hitAsteroid == false*/) {
-            //	stopped = false;
-            //}
-
-        }
-        //arrayCollision ();
-    }
-
-    void GetInput() //gets input for playerDirection
+	void GetInput() //gets input for playerDirection
 	{
         if (stopped)
         {
-            float horzInput = Input.GetAxis(HORIZONTAL);
-            float vertInput = Input.GetAxis(VERTICAL);
+            float horzInput = Input.GetAxis("Horizontal");
+            float vertInput = Input.GetAxis("Vertical");
 
 
             if (Mathf.Abs(horzInput) > 0.15f)
@@ -319,21 +266,64 @@ public class PlayerController : MonoBehaviour {
         }
 	}
     
+	void CheckDirection(){
+		//Check if game has started and if player is stopped
+		if (stopped == true && inMenu == false) {
+			speedUp = 0;
+
+			//up
+			if (lastDirection == 3) {
+				y = 1;
+				x = 0;
+				transform.rotation = Quaternion.Euler (0, 0, 0);
+
+			}
+			//right
+			if (lastDirection == 1) {
+				y = 0;
+				x = 1;
+				transform.rotation = Quaternion.Euler (0, 90, 0);
+
+			}
+			//down
+			if (lastDirection == 4) {
+				y = -1;
+				x = 0;
+				transform.rotation = Quaternion.Euler (0, 180, 0);
+
+			}
+			//left
+			if (lastDirection == 2) {
+				y = 0;
+				x = -1;
+				transform.rotation = Quaternion.Euler (0, -90, 0);
+
+			}
+
+			//If not facing asteroid player starts moving
+			//if (Input.GetButton ("A_P1")/* && hitAsteroid == false) {
+			//	stopped = false;
+			//}
+
+		}
+		//arrayCollision ();
+	}
     
 	void Die(){
+		//FMOD
+		//Sound for death
 		CameraShake.S.shakeDuration = .5f;
 		myParticle.Play();
 		this.transform.position = spawnPoint.transform.position;
 		stopped = true;
 		playerPos [0] = respawnPos [0];
 		playerPos [1] = respawnPos [1];
-		ScoreSystem.Instance.player [player_number].Dies ();
 
 	}
 		
-	/** int x and y are the variables for the direction you are moving, betwen -1 and 1 **/
+	/** int x and y are the variables for the direction you are moving, betwen -1 and 1 **
 
-	void arrayCollision(int x, int y){
+	void arrayCollision(){
 		if (!stopped) {
 			//
 			if (playerPos [0] + x >= 0 && playerPos [0] + x < map.getWidth ()) {
@@ -349,36 +339,35 @@ public class PlayerController : MonoBehaviour {
                     }
                     else if (check / 100 == 1)
                     { // goal
+						//FMOD
+						//Sound for collision
                         HitGoal();
                     }
                     else if (check / 100 == 3)
                     { // mine
+						//FMOD
+						//Sound for collision
                         map.BlowMine(check % 100);
                         Die();
                     }
                     else if (check / 100 == 4)
-                    {
-                        Debug.Log("bounce");
-                        charCont.Move(transform.forward);
-                        playerPos[0] += x;
-                        playerPos[1] += y;
-                        lastDirection = map.hitPad(check % 100);
-                        stopped = true;
-                        CheckDirection();
-                        stopped = false;
-                    }
-                    else if (check / 100 == 5)
-                    {
-						if (map.hitGate (check % 100)) {
-							Die ();
-						} else {
-							playerPos [0] += x;
-							playerPos [1] += y;
-							charCont.Move(transform.forward);
-						}
+                    {//bounce pad
+						//FMOD
+						//Sound for collision
+						//Debug.Log ("bounce");
+						charCont.Move(transform.forward);
+						playerPos[0] += x;
+						playerPos[1] += y;
+						lastDirection = map.hitPad(check % 100);
+						stopped = true;
+						CheckDirection ();
+						stopped = false;
+						//charCont.Move(transform.forward);
                     }
                     else
                     { // asteroid
+						//FMOD
+						//Sound for collision
                         stopped = true;
                     }
 				} else { // outside of bounds of map
@@ -413,5 +402,5 @@ public class PlayerController : MonoBehaviour {
 		mr.enabled = true;
 		scoreIcon.enabled = false;
 	}
-		   
+		   */
 }

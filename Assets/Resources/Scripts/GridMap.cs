@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using FMODUnity;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GridMap : MonoBehaviour {
 
@@ -13,6 +14,7 @@ public class GridMap : MonoBehaviour {
     private bool generateArray = false;
 	public GameObject smallAsteroid;
     private GameObject bouncePad;
+	private GameObject gate;
 	private GameObject xSpawn;
 	private GameObject bSpawn;
 	private GameObject ySpawn;
@@ -31,6 +33,7 @@ public class GridMap : MonoBehaviour {
 	private GameObject spaceMine;
 	private GameObject movingAsteroid;
 
+private GameObject[] PlayerControl = new GameObject[4];
 	private Color bSpawnSpot = new Color32(255,0,0,255);
 	private Color ySpawnSpot = new Color32(255,235,0,255);
 	private Color aSpawnSpot = new Color32(0,255,0,255);
@@ -38,14 +41,19 @@ public class GridMap : MonoBehaviour {
 	private Color goalSpot = new Color32(255,0,255,255);
 	private Color asteroidSpot = new Color32(0,0,0,255);
 	private Color mineSpot = new Color32(0,255,255,255);
-	private Color gateSpot = new Color32 (150, 90, 0, 255);
-	private Color bounce = new Color32 (120, 50, 0, 255);
+	//private Color gateSpot = new Color32 (150, 90, 0, 255);
+	private Color bounce = new Color32 (50, 0, 120, 255);
+	private Color gateVert = new Color32 (150, 90, 0, 255);
+	private Color gateHorz = new Color32 (150, 0, 90, 255);
 
 	private List<GameObject> mines = new List<GameObject> ();
 	private int mineCount = 0;
 
 	private List<GameObject> bouncePads = new List<GameObject> ();
 	private int bounceCount = 0;
+
+	private List<GameObject> gates = new List<GameObject> ();
+	private int gateCount = 0;
 
 	private List<GameObject> asteroids = new List<GameObject>();
 	private List<MeshRenderer> asteroidRenders = new List<MeshRenderer>();
@@ -73,31 +81,28 @@ public class GridMap : MonoBehaviour {
 	public Sprite greenLit;
 	[Tooltip("Set time delay for level preview")]public float startTimer;
 
+	[Tooltip("Pathfinding prefab, used for level testing")] public GameObject finder;
 
 	private SpriteRenderer myOrange;
 	private SpriteRenderer myYellow;
 	private SpriteRenderer myGreen;
 	private SpriteRenderer myRed;
 	private float timer = 6f;
-	//private Component[] render;
-	private int numPlayers;
 	private GameObject player;
-	private bool findingPlayers;
-	private int playerNum;
 	private GameObject options;
 	private bool gameStart;
 	[HideInInspector] public bool playing = false;
-	//private bool playMusic;
 	public Object[] levels;
-	private int levelNum;
+	[HideInInspector]public int levelNum;
 
 
 	void Awake(){
 		levelNum = GameOptions.randomNumber;
-		//StartCoroutine ("Levels");
-		//levels = new Texture2D[GameOptions.maxLevels];
 		levels = Resources.LoadAll ("Art/2D/Level Layouts/Spring 2017/Becker");
-		//public GameObject bouncePad;
+		PlayerControl[0] = GameObject.Find ("Player1");
+		PlayerControl[1] = GameObject.Find ("Player2");
+		PlayerControl[2] = GameObject.Find ("Player3");
+		PlayerControl[3] = GameObject.Find ("Player4");
 		xSpawn = Resources.Load("Prefabs/Spawn_X") as GameObject;
 		bSpawn = Resources.Load("Prefabs/Spawn_B") as GameObject;
 		ySpawn = Resources.Load("Prefabs/Spawn_Y") as GameObject;
@@ -105,7 +110,7 @@ public class GridMap : MonoBehaviour {
 		goal = Resources.Load("Prefabs/Goal") as GameObject;
 		spaceMine = Resources.Load("Prefabs/Bomb_Asteroid") as GameObject;
 		bouncePad = Resources.Load("Prefabs/Bounce") as GameObject;
-		//movingAsteroid;
+		gate = Resources.Load ("Prefabs/Electric_Gate") as GameObject;
 
 	}
 
@@ -119,9 +124,12 @@ public class GridMap : MonoBehaviour {
 	}
     // Use this for initialization
     void Start () {
-		//FMOD
-		//Start of level ambiance
-		map = (Texture2D) levels[levelNum];
+        //FMOD
+        //Start of level ambiance
+        if (SceneManager.GetActiveScene().name == "Arena")
+        {
+            map = (Texture2D)levels[levelNum];
+        }
 		p2 = GameObject.Find("Player2");
 		p3 = GameObject.Find ("Player3");
 		p4 = GameObject.Find ("Player4");
@@ -129,8 +137,6 @@ public class GridMap : MonoBehaviour {
 		lights.SetActive (false);
 		gameStart = false;
 		text.text = "";
-		findingPlayers = true;
-		playerNum = 1;
         myRed = red.GetComponent<SpriteRenderer>();
 		myOrange = orange.GetComponent<SpriteRenderer>();
 		myYellow = yellow.GetComponent<SpriteRenderer>();
@@ -158,43 +164,29 @@ public class GridMap : MonoBehaviour {
 
 		GameObject.Find("Goal").transform.position = GameObject.Find ("Goal(Clone)").transform.position;
 		GameObject.Find ("Goal(Clone)").SetActive (false);
-		PlayerController.S.playerReady = false;
+		PlayerControl[0].GetComponent <PlayerController> ().playerReady = false;
 
-        if(GameOptions.player2)
-		    PlayerController2.S.playerReady = false;
-        else
-            PlayerController2.S.playerReady = true;
 
-        if (GameOptions.player3)
-		    PlayerController3.S.playerReady = false;
-        else
-            PlayerController3.S.playerReady = true;
-
-        if (GameOptions.player4)
-		    PlayerController4.S.playerReady = false;
-        else
-            PlayerController4.S.playerReady = true;
+		if (GameOptions.player2) {
+			PlayerControl[1].GetComponent <PlayerController> ().playerReady = false;
+		} else {
+			PlayerControl[1].GetComponent <PlayerController> ().playerReady = true;
+		}
+		if (GameOptions.player3) {
+			PlayerControl[2].GetComponent <PlayerController> ().playerReady = false;
+		} else {
+			PlayerControl[2].GetComponent <PlayerController> ().playerReady = true;
+		}
+		if (GameOptions.player4) {
+			PlayerControl[3].GetComponent <PlayerController> ().playerReady = false;
+		} else {
+			PlayerControl[3].GetComponent <PlayerController> ().playerReady = true;
+		}
+		gameStart = true;
 
 		gameStart = true;
 
     }
-
-	void FindPlayers(){
-		player = GameObject.FindGameObjectWithTag ("Player"+playerNum);
-		if (player != null) {
-			numPlayers++;
-			playerNum++;
-		} else {
-			findingPlayers = false;
-		}
-	}
-
-	/*void Music(){
-		if (playMusic) {
-			music.Play ();
-		}
-		playMusic = false;
-	}*/
 
 	void GetRenders(){
 		foreach(GameObject go in asteroids){
@@ -300,7 +292,28 @@ public class GridMap : MonoBehaviour {
                         BouncePad tmp = sm.GetComponent<BouncePad>();
                         tmp.GetListing(bounceCount, horrizontalPixels, verticalPixels, gameObject);
                         bounceCount++;
-                    } else if (horrizontalPixels == 0 || horrizontalPixels == map.width - 1 || verticalPixels == 0 || verticalPixels == map.height - 1) {
+				} else if (map.GetPixel(horrizontalPixels, verticalPixels) == gateVert)
+				{
+					colMap[horrizontalPixels, verticalPixels] = 500 + gateCount;
+					GameObject sm;
+					sm = Instantiate(gate, new Vector3(horrizontalPixels, 0, verticalPixels), Quaternion.identity) as GameObject;
+					asteroids.Add(sm);
+					gates.Add(sm);
+					Gate tmp = sm.GetComponentInChildren<Gate>();
+					tmp.GetListing(gateCount, horrizontalPixels, verticalPixels, gameObject);
+					gateCount++;
+				}else if (map.GetPixel(horrizontalPixels, verticalPixels) == gateHorz)
+				{
+					colMap[horrizontalPixels, verticalPixels] = 500 + gateCount;
+					GameObject sm;
+					sm = Instantiate(gate, new Vector3(horrizontalPixels, 0, verticalPixels), Quaternion.Euler(0,90,0)) as GameObject;
+					asteroids.Add(sm);
+					gates.Add(sm);
+					Gate tmp = sm.GetComponentInChildren<Gate>();
+					tmp.GetListing(gateCount, horrizontalPixels, verticalPixels, gameObject);
+					gateCount++;
+					
+					}else if (horrizontalPixels == 0 || horrizontalPixels == map.width - 1 || verticalPixels == 0 || verticalPixels == map.height - 1) {
 						colMap [horrizontalPixels, verticalPixels] = 000;
 					} else {
 						colMap [horrizontalPixels, verticalPixels] = 0;
@@ -324,16 +337,29 @@ public class GridMap : MonoBehaviour {
             
             GetRenders();
         }//end map generation
+		else {
+			if (Input.GetKeyUp ("x")) {
+				//Debug.Log ("keyup");
+				showPaths (SpawnControl.S.giveX(), 2);
+			}
+			if (Input.GetKeyUp ("y")) {
+				//Debug.Log ("keyup");
+				showPaths (SpawnControl.S.giveY(), 3);
+			}
+			if (Input.GetKeyUp ("a")) {
+				//Debug.Log ("keyup");
+				showPaths (SpawnControl.S.giveA(), 0);
+			}
+			if (Input.GetKeyUp ("b")) {
+				//Debug.Log ("keyup");
+				showPaths (SpawnControl.S.giveB(), 1);
+			}
 
-		if (findingPlayers) {
-			FindPlayers ();
 		}
-
-
 
 		if (!playing) {
 			if (gameStart) {
-				if (PlayerController.S.playerReady && PlayerController2.S.playerReady && PlayerController3.S.playerReady && PlayerController4.S.playerReady) {
+				if (PlayerControl[0].GetComponent<PlayerController>().playerReady && PlayerControl[1].GetComponent<PlayerController>().playerReady && PlayerControl[2].GetComponent<PlayerController>().playerReady && PlayerControl[3].GetComponent<PlayerController>().playerReady) {
 					text.text = "";
 					lights.SetActive (true);
 					timer -= Time.deltaTime;
@@ -353,13 +379,16 @@ public class GridMap : MonoBehaviour {
 					if (timer < 0) {
 						//FMOD
 						//Start for game music
-						PlayerController.S.inMenu = false;
-                        if(GameOptions.player2)
-							PlayerController2.S.inMenu = false;
+						PlayerControl [0].GetComponent<PlayerController> ().inMenu = false;
+						if (GameOptions.player2)
+
+							PlayerControl [1].GetComponent<PlayerController> ().inMenu = false;
                         if (GameOptions.player3)
-                            PlayerController3.S.inMenu = false;
+
+							PlayerControl [2].GetComponent<PlayerController> ().inMenu = false;
                         if (GameOptions.player4)
-                            PlayerController4.S.inMenu = false;
+
+							PlayerControl [3].GetComponent<PlayerController> ().inMenu = false;
 						/*render = GetComponentsInChildren<MeshRenderer> ();
 					foreach (MeshRenderer rend in render) {
 						rend.enabled = false;
@@ -377,88 +406,20 @@ public class GridMap : MonoBehaviour {
 						playing = true;
 					}
 				}
-
-				/*if (numPlayers == 3) {
-					if (PlayerController.S.playerReady && PlayerController2.S.playerReady && PlayerController3.S.playerReady) {
-						//Music();
-						text.text = "";
-						lights.SetActive (true);
-						timer -= Time.deltaTime;
-						myRed.sprite = redLit;
-						if (timer < 3) {
-							myRed.sprite = redDim;
-							myOrange.sprite = orangeLit;
-						}
-						if (timer < 2) {
-							myOrange.sprite = orangeDim;
-							myYellow.sprite = yellowLit;
-						}
-						if (timer < 1) {
-							myYellow.sprite = yellowDim;
-							myGreen.sprite = greenLit;
-						}
-						if (timer < 0) {
-							text.text = "";
-							PlayerController.S.inMenu = false;
-							PlayerController2.S.inMenu = false;
-							PlayerController3.S.inMenu = false;
-							/*render = GetComponentsInChildren<MeshRenderer> ();
-						foreach (MeshRenderer rend in render) {
-							rend.enabled = false;
-						}
-							myGreen.sprite = greenDim;
-							lights.SetActive (false);
-							foreach(MeshRenderer rend in asteroidRenders){
-								rend.enabled = true;
-							}
-							playing = true;
-						}
-					}
-				}
-
-				if (numPlayers == 4) {
-					if (PlayerController.S.playerReady && PlayerController2.S.playerReady && PlayerController3.S.playerReady && PlayerController4.S.playerReady) {
-						//Music();
-						text.text = "";
-						lights.SetActive (true);
-						timer -= Time.deltaTime;
-						myRed.sprite = redLit;
-						if (timer < 3) {
-							myRed.sprite = redDim;
-							myOrange.sprite = orangeLit;
-						}
-						if (timer < 2) {
-							myOrange.sprite = orangeDim;
-							myYellow.sprite = yellowLit;
-						}
-						if (timer < 1) {
-							myYellow.sprite = yellowDim;
-							myGreen.sprite = greenLit;
-						}
-						if (timer < 0) {
-							text.text = "";
-							PlayerController.S.inMenu = false;
-							PlayerController2.S.inMenu = false;
-							PlayerController3.S.inMenu = false;
-							PlayerController4.S.inMenu = false;
-							/*render = GetComponentsInChildren<MeshRenderer> ();
-						foreach (MeshRenderer rend in render) {
-							rend.enabled = false;
-						}
-							myGreen.sprite = greenDim;
-							lights.SetActive (false);
-							foreach(MeshRenderer rend in asteroidRenders){
-								rend.enabled = true;
-							}
-							playing = true;
-						}
-					}
-				}*/
 			}
 		}
 	
 	}//end Update
 
+	void showPaths(int[] location, int spawnId){
+		int x = location [0];
+		int z = location [1];
+
+		Vector3 pos = new Vector3 (x, 0, z);
+		GameObject tmp = Instantiate (finder, pos, gameObject.transform.rotation) as GameObject;
+		PathFinder pf = tmp.GetComponent<PathFinder> ();
+		pf.GetMap (colMap, map.width, map.height, spawnId);
+	}
 	public int getPos(int x, int y){
 		return colMap [x, y];
 	}
@@ -475,6 +436,13 @@ public class GridMap : MonoBehaviour {
 		lastDir = b.GetDirection ();
         return lastDir;
     }
+
+	public bool hitGate(int index){
+		bool on;
+		Gate g = gates [index].GetComponent<Gate> ();
+		on = g.On;
+		return on;
+	}
 
 	public int getWidth(){
 		return map.width;

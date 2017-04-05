@@ -7,13 +7,18 @@ public class Gate : MonoBehaviour {
     public float OnTimer;
     public float OffTimer;
 
+	int num;
+	int posX;
+	int posY;
+	GridMap map;
+
     // Use this for initialization
     void Start()
     {
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
 
         if (!On)
@@ -40,4 +45,11 @@ public class Gate : MonoBehaviour {
     {
         On = true;
     }
+
+	public void GetListing(int count, int xPos, int yPos, GameObject m){
+		num = count;
+		posX = xPos;
+		posY = yPos;
+		map = m.GetComponent<GridMap> ();
+	}
 }

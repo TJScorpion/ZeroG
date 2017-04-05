@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class PlayerReady : MonoBehaviour {
 
-	public Text text;
+	/*public Text text;
 	public GameObject lights;
 	public GameObject red;
 	public GameObject orange;
@@ -100,7 +100,7 @@ public class PlayerReady : MonoBehaviour {
 						/*render = GetComponentsInChildren<MeshRenderer> ();
 						foreach (MeshRenderer rend in render) {
 							rend.enabled = false;
-						}*/
+						
 						myGreen.sprite = greenDim;
 						lights.SetActive (false);
 						level.SetActive (true);
@@ -134,7 +134,7 @@ public class PlayerReady : MonoBehaviour {
 						/*render = GetComponentsInChildren<MeshRenderer> ();
 						foreach (MeshRenderer rend in render) {
 							rend.enabled = false;
-						}*/
+						}
 						myGreen.sprite = greenDim;
 						lights.SetActive (false);
 						level.SetActive (true);
@@ -169,7 +169,7 @@ public class PlayerReady : MonoBehaviour {
 						/*render = GetComponentsInChildren<MeshRenderer> ();
 						foreach (MeshRenderer rend in render) {
 							rend.enabled = false;
-						}*/
+						}
 						myGreen.sprite = greenDim;
 						lights.SetActive (false);
 						level.SetActive (true);
@@ -178,4 +178,5 @@ public class PlayerReady : MonoBehaviour {
 			}
 		}
 	}//end update
+*/
 }

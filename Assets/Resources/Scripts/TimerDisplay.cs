@@ -13,8 +13,10 @@ public class TimerDisplay : MonoBehaviour {
 	private int curRound;
 	private int totalRounds;
 	private GameObject rounds;
+	private GameObject gMap;
 	// Use this for initialization
 	void Start () {
+		gMap = GameObject.Find ("Map");
 		rounds = GameObject.Find ("ScoreSystem");
 		MyTimerText = this.GetComponent<Text>();
 	
@@ -29,7 +31,7 @@ public class TimerDisplay : MonoBehaviour {
 		startTimer = GameObject.FindGameObjectWithTag ("Map").GetComponent<GridMap> ().playing;
         if (startTimer) {
             timer += Time.deltaTime;
-			MyTimerText.text = TimeToString()+" "+SceneManager.GetActiveScene().name;
+			MyTimerText.text = TimeToString()+" "+gMap.GetComponent<GridMap>().levels[gMap.GetComponent<GridMap>().levelNum].name;
         }
 	}
 
