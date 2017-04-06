@@ -399,7 +399,7 @@ public class PlayerController : MonoBehaviour {
 		hitAsteroid = true;
 		GameObject tmp = GameObject.FindGameObjectWithTag ("goal");
 		Goal g = tmp.GetComponent<Goal> ();
-		g.Win (0);
+		g.Win (player_number);
 
 		sr.enabled = false;
 		mr.enabled = false;

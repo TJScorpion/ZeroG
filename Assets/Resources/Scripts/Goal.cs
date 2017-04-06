@@ -52,7 +52,7 @@ public class Goal : MonoBehaviour
 		if (endGame == false)
 		{
 
-			if (pNum == 0)
+			if (pNum == 1)
 			{
 				p1Win = true;
 				endGame = true;
@@ -63,7 +63,7 @@ public class Goal : MonoBehaviour
 				//score.text = "Player 1: "+ScoreSystem.Instance.player1Score+" point(s)\nPlayer 2: "+ScoreSystem.Instance.player2Score+" point(s)\nPlayer 3: "+ScoreSystem.Instance.player3Score+" point(s)\nPlayer 4: "+ScoreSystem.Instance.player4Score+" point(s)";
 			}
 
-			if (pNum == 1)
+			if (pNum == 2)
 			{
 				p2Win = true;
 				endGame = true;
@@ -74,11 +74,11 @@ public class Goal : MonoBehaviour
 				//score.text = "Player 1: "+ScoreSystem.Instance.player1Score+" point(s)\nPlayer 2: "+ScoreSystem.Instance.player2Score+" point(s)\nPlayer 3: "+ScoreSystem.Instance.player3Score+" point(s)\nPlayer 4: "+ScoreSystem.Instance.player4Score+" point(s)";
 			}
 
-			if (pNum == 2)
+			if (pNum == 3)
 			{
 				p3Win = true;
 				endGame = true;
-ScoreSystem.Instance.player [3].AddScore (5);
+				ScoreSystem.Instance.player [3].AddScore (5);
 				ScoreSystem.Instance.player [3].SetTime (ScoreSystem.Instance.current_level, timer.timer);
 				ScoreSystem.Instance.player [3].SetPlace (ScoreSystem.Instance.current_level, 1);
 				
@@ -86,7 +86,7 @@ ScoreSystem.Instance.player [3].AddScore (5);
 				//score.text = "Player 1: "+ScoreSystem.Instance.player1Score+" point(s)\nPlayer 2: "+ScoreSystem.Instance.player2Score+" point(s)\nPlayer 3: "+ScoreSystem.Instance.player3Score+" point(s)\nPlayer 4: "+ScoreSystem.Instance.player4Score+" point(s)";
 			}
 
-			if (pNum == 3)
+			if (pNum == 4)
 			{
 				p4Win = true;
 				endGame = true;
@@ -107,7 +107,7 @@ ScoreSystem.Instance.player [3].AddScore (5);
 		if (endGame == true)
 		{
 
-			if (pNum == 0 && p1Win == false && secondPlace == false)
+			if (pNum == 1 && p1Win == false && secondPlace == false)
 			{
 				p1Win = true;
 				secondPlace = true;
@@ -116,7 +116,7 @@ ScoreSystem.Instance.player [3].AddScore (5);
 				ScoreSystem.Instance.player [1].SetPlace (ScoreSystem.Instance.current_level, 2);
 			}
 
-			if (pNum == 1 && p2Win == false && secondPlace == false)
+			if (pNum == 2 && p2Win == false && secondPlace == false)
 			{
 				p2Win = true;
 				secondPlace = true;
@@ -125,7 +125,7 @@ ScoreSystem.Instance.player [3].AddScore (5);
 				ScoreSystem.Instance.player [2].SetPlace (ScoreSystem.Instance.current_level, 2);
 			}
 
-			if (pNum == 2 && p3Win == false && secondPlace == false)
+			if (pNum == 3 && p3Win == false && secondPlace == false)
 			{
 				p3Win = true;
 				secondPlace = true;
@@ -134,7 +134,7 @@ ScoreSystem.Instance.player [3].AddScore (5);
 				ScoreSystem.Instance.player [3].SetPlace (ScoreSystem.Instance.current_level, 2);
 			}
 
-			if (pNum == 3 && p4Win == false && secondPlace == false)
+			if (pNum == 4 && p4Win == false && secondPlace == false)
 			{
 				p4Win = true;
 				secondPlace = true;
@@ -147,7 +147,7 @@ ScoreSystem.Instance.player [3].AddScore (5);
 		if (endGame == true)
 		{
 
-			if (pNum == 0 && p1Win == false && secondPlace == true)
+			if (pNum == 1 && p1Win == false && secondPlace == true)
 			{
 				PlayerControl[0].GetComponent <PlayerController> ().StartNewLevel ();
 				p1Win = true;
@@ -156,7 +156,7 @@ ScoreSystem.Instance.player [3].AddScore (5);
 				ScoreSystem.Instance.player [1].SetPlace (ScoreSystem.Instance.current_level, 3);
 			}
 
-			if (pNum == 1 && p2Win == false && secondPlace == true)
+			if (pNum == 2 && p2Win == false && secondPlace == true)
 			{
 				PlayerControl[1].GetComponent <PlayerController> ().StartNewLevel ();
 				p2Win = true;
@@ -165,7 +165,7 @@ ScoreSystem.Instance.player [3].AddScore (5);
 				ScoreSystem.Instance.player [2].SetPlace (ScoreSystem.Instance.current_level, 3);
 			}
 
-			if (pNum == 2 && p3Win == false && secondPlace == true)
+			if (pNum == 3 && p3Win == false && secondPlace == true)
 			{
 				PlayerControl[2].GetComponent <PlayerController> ().StartNewLevel ();
 				p3Win = true;
@@ -174,7 +174,7 @@ ScoreSystem.Instance.player [3].AddScore (5);
 				ScoreSystem.Instance.player [3].SetPlace (ScoreSystem.Instance.current_level, 3);
 			}
 
-			if (pNum == 3 && p4Win == false && secondPlace == true)
+			if (pNum == 4 && p4Win == false && secondPlace == true)
 			{
 				PlayerControl[3].GetComponent <PlayerController> ().StartNewLevel ();
 				p4Win = true;

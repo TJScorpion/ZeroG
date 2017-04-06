@@ -297,7 +297,7 @@ private GameObject[] PlayerControl = new GameObject[4];
 					colMap[horrizontalPixels, verticalPixels] = 500 + gateCount;
 					GameObject sm;
 					sm = Instantiate(gate, new Vector3(horrizontalPixels, 0, verticalPixels), Quaternion.identity) as GameObject;
-					asteroids.Add(sm);
+					//asteroids.Add(sm);
 					gates.Add(sm);
 					Gate tmp = sm.GetComponentInChildren<Gate>();
 					tmp.GetListing(gateCount, horrizontalPixels, verticalPixels, gameObject);
@@ -307,7 +307,7 @@ private GameObject[] PlayerControl = new GameObject[4];
 					colMap[horrizontalPixels, verticalPixels] = 500 + gateCount;
 					GameObject sm;
 					sm = Instantiate(gate, new Vector3(horrizontalPixels, 0, verticalPixels), Quaternion.Euler(0,90,0)) as GameObject;
-					asteroids.Add(sm);
+					//asteroids.Add(sm);
 					gates.Add(sm);
 					Gate tmp = sm.GetComponentInChildren<Gate>();
 					tmp.GetListing(gateCount, horrizontalPixels, verticalPixels, gameObject);
@@ -439,7 +439,7 @@ private GameObject[] PlayerControl = new GameObject[4];
 
 	public bool hitGate(int index){
 		bool on;
-		Gate g = gates [index].GetComponent<Gate> ();
+		Gate g = gates [index].GetComponentInChildren<Gate> ();
 		on = g.On;
 		return on;
 	}
