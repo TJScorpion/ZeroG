@@ -16,6 +16,9 @@ public class GameOptions : MonoBehaviour {
     public static int levelsCompleted;
 	public static int randomNumber;
 
+	public bool minesEnabled;
+	public bool gatesEnabled;
+
 	Image p1Icon;
 	Image p2Icon;
 	Image p3Icon;
@@ -36,6 +39,11 @@ public class GameOptions : MonoBehaviour {
             Destroy(gameObject);
         }
     }
+
+	void Start(){
+		minesEnabled = true;
+		gatesEnabled = true;
+	}
 
     public void LoadOptions(bool p1, bool p2, bool p3, bool p4, int numRounds, int max)
     {

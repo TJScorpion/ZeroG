@@ -23,7 +23,7 @@ public class TimerDisplay : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		GameOptions tmp = rounds.GetComponent<GameOptions> ();
 		curRound = tmp.GetRound ();
 		totalRounds = tmp.GetTotalRounds ();

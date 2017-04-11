@@ -29,12 +29,14 @@ public class MenuSelector : MonoBehaviour {
 	GameStart starter;
 
     void Start () {
-        active_text = new Color(1, 0, 0, 1);
-        inactive_text = butt_texts[selector].color;
-        butt_texts[selector].color = active_text;
-		buttons[selector].GetComponent<Image>().sprite = active_button;
-		GameObject tmp = GameObject.Find ("GameStartCanvas");
-		starter = tmp.GetComponent<GameStart> ();
+		if (SceneManager.GetActiveScene ().name == "GameStart") {
+			active_text = new Color (1, 0, 0, 1);
+			inactive_text = butt_texts [selector].color;
+			butt_texts [selector].color = active_text;
+			buttons [selector].GetComponent<Image> ().sprite = active_button;
+			GameObject tmp = GameObject.Find ("GameStartCanvas");
+			starter = tmp.GetComponent<GameStart> ();
+		}
     }
 	
 	void Update () {
@@ -49,19 +51,19 @@ public class MenuSelector : MonoBehaviour {
      **/
     void Controls()
     {
-        if ((Input.GetAxis("Horizontal") == -1 || Input.GetAxis("D_PAD") == -1) && !limit_movement)
+		if ((Input.GetAxis("Horizontal") == -1 || Input.GetAxis("Vertical") == 1 || Input.GetAxis("D_PADy") == 1 || Input.GetAxis("D_PAD") == -1) && !limit_movement)
         {
 
             MoveBack();
             limit_movement = true;
 
-        } else if((Input.GetAxis("Horizontal") == 1 || Input.GetAxis("D_PAD") == 1) && !limit_movement)
+		} else if((Input.GetAxis("Horizontal") == 1 || Input.GetAxis("Vertical") == -1 || Input.GetAxis("D_PADy") == -1 || Input.GetAxis("D_PAD") == 1) && !limit_movement)
         {
 
             MoveForward();
             limit_movement = true;
 
-        } else if(Mathf.Abs(Input.GetAxis("Horizontal")) < 0.3 && Input.GetAxis("D_PAD") == 0)
+		} else if(Mathf.Abs(Input.GetAxis("Horizontal")) < 0.3 && Mathf.Abs(Input.GetAxis("Vertical")) < 0.3 && Input.GetAxis("D_PAD") == 0 && Input.GetAxis("D_PADy") == 0)
         {
             limit_movement = false;
         }
@@ -79,11 +81,32 @@ public class MenuSelector : MonoBehaviour {
 				}/* else if (selector < 3) {
 				SceneManager.LoadScene (levels [selector]);
 			}*/
+			else if (selector == 1) {
+					SceneManager.LoadScene ("Options");
+				}
 			else if (selector == 3) {
 					//EditorApplication.isPlaying = false;
 					Application.Quit ();
 				}
-			} else {
+
+			} else if (SceneManager.GetActiveScene().name == "Options") {
+				if (selector == 0 && GameOptions.Instance.minesEnabled == false) {
+					GameOptions.Instance.minesEnabled = true;
+					butt_texts [0].text = "Enabled";
+				} else if (selector == 0 && GameOptions.Instance.minesEnabled == true) {
+					GameOptions.Instance.minesEnabled = false;
+					butt_texts [0].text = "Disabled";
+				} else if (selector == 1 && GameOptions.Instance.gatesEnabled == false) {
+					GameOptions.Instance.gatesEnabled = true;
+					butt_texts [1].text = "Enabled";
+				} else if (selector == 1 && GameOptions.Instance.gatesEnabled == true) {
+					GameOptions.Instance.gatesEnabled = false;
+					butt_texts [1].text = "Disabled";
+				} else if (selector == 2) {
+					SceneManager.LoadScene ("GameStart");
+				}
+			}
+			else {
 				if (selector == 0) {
 					GameObject temp = GameObject.Find ("Main Camera");
 					temp.GetComponent<PauseGame> ().Pause ();
@@ -140,10 +163,20 @@ public class MenuSelector : MonoBehaviour {
 			}
 			buttons [selector].GetComponent<Image> ().sprite = active_button;
 			butt_texts [selector].color = active_text;
-		} else {
+		} else if (SceneManager.GetActiveScene().name == "Arena"){
 			buttons [selector].GetComponent<Image> ().sprite = inactive_button;
 			butt_texts [selector].color = inactive_text;
 			if (selector < 1) {
+				selector++;
+			} else {
+				selector = 0;
+			}
+			buttons [selector].GetComponent<Image> ().sprite = active_button;
+			butt_texts [selector].color = active_text;
+		}else if (SceneManager.GetActiveScene().name == "Options"){
+			buttons [selector].GetComponent<Image> ().sprite = inactive_button;
+			butt_texts [selector].color = inactive_text;
+			if (selector < 2) {
 				selector++;
 			} else {
 				selector = 0;
@@ -166,13 +199,23 @@ public class MenuSelector : MonoBehaviour {
 			}
 			buttons [selector].GetComponent<Image> ().sprite = active_button;
 			butt_texts [selector].color = active_text;
-		} else {
+		} else if (SceneManager.GetActiveScene().name == "Arena"){
 			butt_texts [selector].color = inactive_text;
 			buttons [selector].GetComponent<Image> ().sprite = inactive_button;
 			if (selector > 0) {
 				selector--;
 			} else {
 				selector = 1;
+			}
+			buttons [selector].GetComponent<Image> ().sprite = active_button;
+			butt_texts [selector].color = active_text;
+		} else if (SceneManager.GetActiveScene().name == "Options"){
+			butt_texts [selector].color = inactive_text;
+			buttons [selector].GetComponent<Image> ().sprite = inactive_button;
+			if (selector > 0) {
+				selector--;
+			} else {
+				selector = 2;
 			}
 			buttons [selector].GetComponent<Image> ().sprite = active_button;
 			butt_texts [selector].color = active_text;

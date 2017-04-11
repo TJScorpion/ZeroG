@@ -205,71 +205,15 @@ public class Goal : MonoBehaviour
 
 			textField.text = (((int) levelTimer) - 1).ToString ();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             if (levelTimer < 0)
             {
                 textField.text = "Loading...";
 
             }
             else
-            {
-
-
-
+			{
                 endGameTimerGameObject.SetActive(true);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 				endGameTimer.text = (((int) endTime) + 1).ToString ();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
             }
         }
 

@@ -39,8 +39,14 @@ public class ScoreSystem : MonoBehaviour {
 		public void SetDeaths (int amount){deaths = amount;}
 		public int GetDeaths (){return deaths;}
 		//Time Get/Set functions
-		public void SetTime (int level, float time){levels [level].time = time;}
-		public float GetTime (int level){return levels [level].time;}
+		public void SetTime (int level, float time)
+		{
+			levels [level].time = time;
+		}
+		public float GetTime (int level)
+		{
+			return levels [level].time;
+		}
 		public float GetTotalTime()
 		{
 			float total_time = 0;

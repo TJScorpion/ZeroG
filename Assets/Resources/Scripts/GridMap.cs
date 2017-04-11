@@ -162,8 +162,8 @@ private GameObject[] PlayerControl = new GameObject[4];
 		}
 		text.text = "Choose Your Launch Pad!";
 
-		GameObject.Find("Goal").transform.position = GameObject.Find ("Goal(Clone)").transform.position;
-		GameObject.Find ("Goal(Clone)").SetActive (false);
+		//GameObject.Find("Goal").transform.position = GameObject.Find ("Goal(Clone)").transform.position;
+		//Destroy(GameObject.Find ("Goal(Clone)"));
 		PlayerControl[0].GetComponent <PlayerController> ().playerReady = false;
 
 
@@ -252,6 +252,8 @@ private GameObject[] PlayerControl = new GameObject[4];
                         //  mapObjs[horrizontalPixels * ySize + verticalPixels] = 1;
                         colMap[horrizontalPixels, verticalPixels] = 100;
                         Instantiate(goal, new Vector3(horrizontalPixels, 0, verticalPixels), Quaternion.identity);
+						GameObject.Find("Goal").transform.position = GameObject.Find ("Goal(Clone)").transform.position;
+						Destroy(GameObject.Find ("Goal(Clone)"));
                     }
                     else if (map.GetPixel(horrizontalPixels, verticalPixels) == asteroidSpot)
                     {
@@ -270,7 +272,7 @@ private GameObject[] PlayerControl = new GameObject[4];
                         colMap[horrizontalPixels, verticalPixels] = 0;
                         //Debug.Log("ppooo");
                     }
-                    else if (map.GetPixel(horrizontalPixels, verticalPixels) == mineSpot)
+					else if (map.GetPixel(horrizontalPixels, verticalPixels) == mineSpot && GameOptions.Instance.minesEnabled == true)
                     {
                         //  mapObjs[horrizontalPixels * ySize + verticalPixels] = 1;
                         colMap[horrizontalPixels, verticalPixels] = 300 + mineCount;
@@ -292,7 +294,7 @@ private GameObject[] PlayerControl = new GameObject[4];
                         BouncePad tmp = sm.GetComponent<BouncePad>();
                         tmp.GetListing(bounceCount, horrizontalPixels, verticalPixels, gameObject);
                         bounceCount++;
-				} else if (map.GetPixel(horrizontalPixels, verticalPixels) == gateVert)
+					} else if (map.GetPixel(horrizontalPixels, verticalPixels) == gateVert && GameOptions.Instance.gatesEnabled == true)
 				{
 					colMap[horrizontalPixels, verticalPixels] = 500 + gateCount;
 					GameObject sm;
@@ -302,7 +304,7 @@ private GameObject[] PlayerControl = new GameObject[4];
 					Gate tmp = sm.GetComponentInChildren<Gate>();
 					tmp.GetListing(gateCount, horrizontalPixels, verticalPixels, gameObject);
 					gateCount++;
-				}else if (map.GetPixel(horrizontalPixels, verticalPixels) == gateHorz)
+					}else if (map.GetPixel(horrizontalPixels, verticalPixels) == gateHorz && GameOptions.Instance.gatesEnabled == true)
 				{
 					colMap[horrizontalPixels, verticalPixels] = 500 + gateCount;
 					GameObject sm;
