@@ -376,7 +376,10 @@ public class PlayerController : MonoBehaviour {
 							playerPos [1] += y;
 							charCont.Move(transform.forward);
 						}
-                    }
+					}else if (check / 100 == 6)
+					{
+						Die ();
+					}
                     else
                     { // asteroid
                         stopped = true;

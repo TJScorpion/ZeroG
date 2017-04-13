@@ -297,6 +297,8 @@ private GameObject[] PlayerControl = new GameObject[4];
 					} else if (map.GetPixel(horrizontalPixels, verticalPixels) == gateVert && GameOptions.Instance.gatesEnabled == true)
 				{
 					colMap[horrizontalPixels, verticalPixels] = 500 + gateCount;
+					colMap[horrizontalPixels, verticalPixels+2] = 600;
+					colMap[horrizontalPixels, verticalPixels-2] = 600;
 					GameObject sm;
 					sm = Instantiate(gate, new Vector3(horrizontalPixels, 0, verticalPixels), Quaternion.identity) as GameObject;
 					//asteroids.Add(sm);
@@ -307,6 +309,8 @@ private GameObject[] PlayerControl = new GameObject[4];
 					}else if (map.GetPixel(horrizontalPixels, verticalPixels) == gateHorz && GameOptions.Instance.gatesEnabled == true)
 				{
 					colMap[horrizontalPixels, verticalPixels] = 500 + gateCount;
+					colMap[horrizontalPixels+2, verticalPixels] = 600;
+					colMap[horrizontalPixels-2, verticalPixels] = 600;
 					GameObject sm;
 					sm = Instantiate(gate, new Vector3(horrizontalPixels, 0, verticalPixels), Quaternion.Euler(0,90,0)) as GameObject;
 					//asteroids.Add(sm);
