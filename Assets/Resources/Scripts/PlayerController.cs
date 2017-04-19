@@ -84,11 +84,11 @@ public class PlayerController : MonoBehaviour {
     void FixedUpdate()
     {
 		if (!finished) {
-			if ((charCont.collisionFlags & CollisionFlags.Sides) != 0) {
-				Debug.Log ("front bash");
+		//	if ((charCont.collisionFlags & CollisionFlags.Sides) != 0) {
+			//	Debug.Log ("front bash");
 				//stopped = true;
-			}
-			forward = this.transform.TransformDirection (Vector3.forward);
+			//}
+			//forward = this.transform.TransformDirection (Vector3.forward);
 			/*Vector3 up = new Vector3 (0, yUp, 0);
 		Vector3 forward = transform.TransformDirection (Vector3.forward) * length;
 		Debug.DrawRay (transform.position + up, forward, Color.green, 100);*/

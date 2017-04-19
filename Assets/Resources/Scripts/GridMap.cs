@@ -98,7 +98,7 @@ private GameObject[] PlayerControl = new GameObject[4];
 
 	void Awake(){
 		levelNum = GameOptions.randomNumber;
-		levels = Resources.LoadAll ("Art/2D/Level Layouts/Spring 2017/Becker");
+		levels = Resources.LoadAll ("Art/2D/Level Layouts/Spring 2017/All Maps");
 		PlayerControl[0] = GameObject.Find ("Player1");
 		PlayerControl[1] = GameObject.Find ("Player2");
 		PlayerControl[2] = GameObject.Find ("Player3");
